@@ -9,17 +9,23 @@
 	<li>从缓存中取数据，被一方法调用
 		<pre>protected Object getSingleton(String beanName, boolean allowEarlyReference) {}</pre></li>
 	<li>当缓存中取不到时，再次调用getSingleton的重载方法，将这个类的工厂方法放到三级缓存中去。如果放进去了，下次需要该类时，从一方法中可获取到。
-		<pre>// Create bean instance.创建实例对象（普通对象非代理），调用addSingletonFactory放入缓存
-		getSingleton(beanName, () -> {return createBean(beanName, mbd, args);});</pre>
-		<pre>addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
+		<pre>
+		// Create bean instance.创建实例对象（普通对象非代理），调用addSingletonFactory放入缓存
+		getSingleton(beanName, () -> {return createBean(beanName, mbd, args);});
+		</pre>
+		<pre>
+		addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		protected void addSingletonFactory(String beanName, ObjectFactory<?> singletonFactory) {
 			if (!this.singletonObjects.containsKey(beanName)) {
 				this.singletonFactories.put(beanName, singletonFactory);
 				this.earlySingletonObjects.remove(beanName);
 				this.registeredSingletons.add(beanName);
 			}
-		}</pre>
-		<pre>public Object getSingleton(String beanName, ObjectFactory<?> singletonFactory) {}</pre>
-		</li>
+		}
+		</pre>
+		<pre>
+		public Object getSingleton(String beanName, ObjectFactory<?> singletonFactory) {}
+		</pre>
+	</li>
 </ol>
 
