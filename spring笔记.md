@@ -27,22 +27,25 @@ protected void addSingletonFactory(String beanName, ObjectFactory<?> singletonFa
 </li>
 </ol>
 
-###BeanFactory 和 FactoryBean
+### BeanFactory 和 FactoryBean
 <ol><li>BeanFactory是bean的工厂，是springIOC容器管理bean的一些规范，其实现类有ApplicationContext，主要方法为getBean，其内部会调用AbstractBeanFactory#doGetBean方法
-	<pre>protected <T> T doGetBean(String name, @Nullable Class<T> requiredType, @Nullable Object[] args, boolean typeCheckOnly)
+	<pre>
+	protected <T> T doGetBean(String name, @Nullable Class<T> requiredType, @Nullable Object[] args, boolean typeCheckOnly)
 			throws BeansException {
 		String beanName = transformedBeanName(name);
 		Object bean;
 		// Eagerly check singleton cache for manually registered singletons.
 		Object sharedInstance = getSingleton(beanName);
 		if (sharedInstance != null && args == null) {
-			...
+			//...
+			// getObjectForBeanInstance内部会调用getObjectFromFactoryBean再调用doGetObjectFromFactoryBean，其内部会调用factory.getObject()，这里就是BeanFactory和FactoryBean的关联之处
 			bean = getObjectForBeanInstance(sharedInstance, name, beanName, null);
 		}
-		else {...}</pre>
-		getObjectForBeanInstance内部会调用getObjectFromFactoryBean再调用doGetObjectFromFactoryBean，其内部会调用factory.getObject()，
-		这里就是BeanFactory和FactoryBean的关联之处
-		<pre>private Object doGetObjectFromFactoryBean(FactoryBean<?> factory, String beanName) throws BeanCreationException {
+		else {//...
+		}
+		}</pre>
+		<pre>
+		private Object doGetObjectFromFactoryBean(FactoryBean<?> factory, String beanName) throws BeanCreationException {
 		Object object;
 		try {
 			if (System.getSecurityManager() != null) {
@@ -57,7 +60,8 @@ protected void addSingletonFactory(String beanName, ObjectFactory<?> singletonFa
 			else {
 				object = factory.getObject();
 			}
-		}</pre>
+		}}
+	</pre>
 	</li>
 	<li>FactoryBean决定了BeanFactory最终要得到的实例对象是什么，也是我们能在spring中用到的对象实例
 	<pre>protected Object getObjectForBeanInstance(
@@ -104,5 +108,5 @@ protected void addSingletonFactory(String beanName, ObjectFactory<?> singletonFa
 		}
 		return object;
 	}</pre>
-	<pre></pre>
-	</li></ol>
+	</li>
+</ol>
