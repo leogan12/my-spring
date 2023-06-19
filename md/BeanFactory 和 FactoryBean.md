@@ -82,3 +82,4 @@
 		return object;
 	}
 	```
+3. 参考：- Spring源码 - getObjectForBeanInstance() https://blog.csdn.net/qq_43911324/article/details/122623295
