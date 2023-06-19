@@ -34,7 +34,7 @@
 		}
 	}
 	```
-2. FactoryBean决定了BeanFactory最终要得到的实例对象是什么，也是我们能在spring中用到的对象实例
+2. FactoryBean决定了BeanFactory&getBean方法最终要得到的实例对象是什么，也是我们能在spring中用到的对象实例
 	```
 	protected Object getObjectForBeanInstance(Object beanInstance, String name, String beanName, RootBeanDefinition mbd) {
 		// Don't let calling code try to dereference the factory if the bean isn't a factory.
