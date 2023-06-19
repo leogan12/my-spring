@@ -1,7 +1,6 @@
 ### BeanFactory 和 FactoryBean
-<ol>
-	<li>BeanFactory是bean的工厂，是springIOC容器管理bean的一些规范，其实现类有ApplicationContext，主要方法为getBean，其内部会调用AbstractBeanFactory#doGetBean方法
-	<pre>
+1. BeanFactory是bean的工厂，是springIOC容器管理bean的一些规范，其实现类有ApplicationContext，主要方法为getBean，其内部会调用AbstractBeanFactory#doGetBean方法
+	```
 	protected <T> T doGetBean(String name, @Nullable Class<T> requiredType, @Nullable Object[] args, boolean typeCheckOnly)
 			throws BeansException {
 	String beanName = transformedBeanName(name);
@@ -16,8 +15,9 @@
 	}
 	else {// ...
 	}
-	}</pre>
-	<pre>
+	}
+	```
+	```
 	private Object doGetObjectFromFactoryBean(FactoryBean<?> factory, String beanName) throws BeanCreationException {
 	Object object;
 		if (System.getSecurityManager() != null) {
@@ -33,18 +33,19 @@
 			object = factory.getObject();
 		}
 	}
-	</pre></li>
-	<li>FactoryBean决定了BeanFactory最终要得到的实例对象是什么，也是我们能在spring中用到的对象实例
-	<pre>protected Object getObjectForBeanInstance(
-			Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd) {
-
+	```
+2. FactoryBean决定了BeanFactory最终要得到的实例对象是什么，也是我们能在spring中用到的对象实例
+	```
+	protected Object getObjectForBeanInstance(Object beanInstance, String name, String beanName, RootBeanDefinition mbd) {
 		// Don't let calling code try to dereference the factory if the bean isn't a factory.
 		// 判断名称是否以&开头 如果要获取到FactoryBean本身，beanName必然是以&开头的
 		if (BeanFactoryUtils.isFactoryDereference(name)) {
-			if (beanInstance instanceof NullBean) {// null的话直接返回
+			if (beanInstance instanceof NullBean) {
+			// null的话直接返回
 				return beanInstance;
 			}
-			if (!(beanInstance instanceof FactoryBean)) {// 如果不是FactoryBean 就报错
+			if (!(beanInstance instanceof FactoryBean)) {
+			// 如果不是FactoryBean 就报错
 				throw new BeanIsNotAFactoryException(beanName, beanInstance.getClass());
 			}
 			if (mbd != null) {
@@ -52,20 +53,20 @@
 			}
 			return beanInstance;
 		}
-
 		// Now we have the bean instance, which may be a normal bean or a FactoryBean.
 		// If it's a FactoryBean, we use it to create a bean instance, unless the
 		// caller actually wants a reference to the factory.
-		if (!(beanInstance instanceof FactoryBean)) {// 是FactoryBean就返回
+		if (!(beanInstance instanceof FactoryBean)) {
+		// 是FactoryBean就返回
 			return beanInstance;
 		}
-
 		Object object = null;
 		if (mbd != null) {
 			mbd.isFactoryBean = true;
 		}
 		else {
-			object = getCachedObjectForFactoryBean(beanName);// 从缓存中获取 缓存是factoryBeanObjectCache
+			object = getCachedObjectForFactoryBean(beanName);
+			// 从缓存中获取 缓存是factoryBeanObjectCache
 		}
 		if (object == null) {
 			// Return bean instance from factory.
@@ -75,10 +76,9 @@
 				mbd = getMergedLocalBeanDefinition(beanName);
 			}
 			boolean synthetic = (mbd != null && mbd.isSynthetic());
-			object = getObjectFromFactoryBean(factory, beanName, !synthetic);// 获取对象 内部再调用doGetObjectFromFactoryBean 内部再调用factory.getObject();
+			object = getObjectFromFactoryBean(factory, beanName, !synthetic);
+			// 获取对象 内部再调用doGetObjectFromFactoryBean 内部再调用factory.getObject();
 		}
 		return object;
 	}
-	</pre>
-	</li>
-</ol>
+	```
