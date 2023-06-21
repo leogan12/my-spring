@@ -15,10 +15,10 @@
     definition.getConstructorArgumentValues().addGenericArgumentValue(beanClassName); // issue #59
     definition.setBeanClass(this.mapperFactoryBeanClass);
 ```
-4. MapperFactoryBean的getObject获取的实例是mybatis生成实例；
+4. MapperFactoryBean的getObject获取的实例是mybatis生成实例 MapperProxy；
 ```
 public T getObject() throws Exception {
     return getSqlSession().getMapper(this.mapperInterface);
   }
 ```
-5. 
+5. MapperProxy实现了InvocationHandler？
