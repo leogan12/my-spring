@@ -82,4 +82,62 @@
 		return object;
 	}
 	```
+	```
+	protected Object getObjectFromFactoryBean(FactoryBean<?> factory, String beanName, boolean shouldPostProcess) {
+	//单例且singletonObjects中已经加载了FactoryBean
+	if (factory.isSingleton() && containsSingleton(beanName)) {
+	  synchronized (getSingletonMutex()) {
+		 //第一次进来是获取不到的
+		 Object object = this.factoryBeanObjectCache.get(beanName);
+		 if (object == null) {
+			//调用getObject，此时生成了Dog实例，打印“调用了Dog构造器”
+			object = doGetObjectFromFactoryBean(factory, beanName);
+			// Only post-process and store if not put there already during getObject() call above
+			// (e.g. because of circular reference processing triggered by custom getBean calls)
+			Object alreadyThere = this.factoryBeanObjectCache.get(beanName);
+			if (alreadyThere != null) {
+			   object = alreadyThere;
+			}
+			else {
+			   if (shouldPostProcess) {
+				  if (isSingletonCurrentlyInCreation(beanName)) {
+					 // Temporarily return non-post-processed object, not storing it yet..
+					 return object;
+				  }
+				  beforeSingletonCreation(beanName);
+				  try {
+					 //调用postProcessAfterInitialization，如果有AOP，此时生成代理对象
+					 object = postProcessObjectFromFactoryBean(object, beanName);
+				  }
+				  catch (Throwable ex) {
+					 throw new BeanCreationException(beanName,
+						   "Post-processing of FactoryBean's singleton object failed", ex);
+				  }
+				  finally {
+					 afterSingletonCreation(beanName);
+				  }
+			   }
+			   if (containsSingleton(beanName)) {
+				  //将Dog放到缓存中，下次就可以取到了
+				  this.factoryBeanObjectCache.put(beanName, object);
+			   }
+			}
+		 }
+		 return object;
+	  }
+	}
+	else {
+	  Object object = doGetObjectFromFactoryBean(factory, beanName);
+	  if (shouldPostProcess) {
+		 try {
+			object = postProcessObjectFromFactoryBean(object, beanName);
+		 }
+		 catch (Throwable ex) {
+			throw new BeanCreationException(beanName, "Post-processing of FactoryBean's object failed", ex);
+		 }
+	  }
+	  return object;
+	}
+	}
+	```
 3. 参考：- Spring源码 - getObjectForBeanInstance() https://blog.csdn.net/qq_43911324/article/details/122623295
