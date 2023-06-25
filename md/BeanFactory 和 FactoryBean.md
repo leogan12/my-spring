@@ -141,3 +141,6 @@
 	}
 	```
 3. 参考：- Spring源码 - getObjectForBeanInstance() https://blog.csdn.net/qq_43911324/article/details/122623295
+
+### ObjectFactory 和 FactoryBean
+4. 参考：https://blog.csdn.net/weixin_39120845/article/details/106389454
