@@ -143,4 +143,6 @@
 3. 参考：- Spring源码 - getObjectForBeanInstance() https://blog.csdn.net/qq_43911324/article/details/122623295
 
 ### ObjectFactory 和 FactoryBean
-4. 参考：https://blog.csdn.net/weixin_39120845/article/details/106389454
+4. ObjectFactory只是在出现循环依赖时，延迟了bean的实例化，放入三级缓存singletonFactories，提前暴露引用，避免循环依赖；
+5. 参考：- https://blog.csdn.net/weixin_39120845/article/details/106389454
+   - 【Spring】BeanFactory、ObjectFactory与FactoryBean https://blog.csdn.net/qq_32117641/article/details/109066054
