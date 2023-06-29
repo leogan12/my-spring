@@ -9,9 +9,7 @@ getSingleton用于获取和创建bean，首先调用getSingleton方法从缓存�
 ```
 sharedInstance = getSingleton(beanName, () -> {
 		return createBean(beanName, mbd, args);
-});
-```
-
+});```
 	2.1 DefaultSingletonBeanRegistry#getSingleton(String beanName, ObjectFactory<?> singletonFactory)：导致2中的createBean方法会执行
 	``` singletonObject = singletonFactory.getObject(); ```
 	
