@@ -3,12 +3,12 @@ getSingleton用于获取和创建bean，首先调用getSingleton方法从缓存�
 1. 从一二三级缓存中查询，这个步骤是从getBean开始，到doGetBean方法中， DefaultSingletonBeanRegistry#getSingleton(beanName, true)：
 这是查询缓存的方法，如果三级缓存中有的话，会执行singletonFactory.getObject()，一般出现在循环依赖的情况下，
 导致执行2.1.1.2中的getEarlyBeanReference方法
-Object sharedInstance = getSingleton(beanName);
+```Object sharedInstance = getSingleton(beanName);```
 
 2. doGetBean：缓存中没有就创建
-sharedInstance = getSingleton(beanName, () -> {
+```sharedInstance = getSingleton(beanName, () -> {
 		return createBean(beanName, mbd, args);
-});
+});```
 
 	2.1 DefaultSingletonBeanRegistry#getSingleton(String beanName, ObjectFactory<?> singletonFactory)：导致2中的createBean方法会执行
 	singletonObject = singletonFactory.getObject();
