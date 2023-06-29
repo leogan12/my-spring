@@ -52,12 +52,14 @@ sharedInstance = getSingleton(beanName, () -> {
 	
 	2.2 getSingleton： 已经拿到对象了
 	newSingleton = true;
+
 	2.3 getSingleton： 放入一级缓存（二级缓存可能是空的） 删除二三级缓存
 	if (newSingleton) {
 		addSingleton(beanName, singletonObject);
 	}
-	2.4 getSingleton：返回
+	
+ 	2.4 getSingleton：返回
 	return singletonObject;
 				
-3. doGetBean：这里会判断是否是FactoryBean 如mybatis中的MapperFactoryBean
+4. doGetBean：这里会判断是否是FactoryBean 如mybatis中的MapperFactoryBean
 bean = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);
