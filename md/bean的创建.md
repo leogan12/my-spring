@@ -12,10 +12,14 @@ sharedInstance = getSingleton(beanName, () -> {
 return createBean(beanName, mbd, args);
 }); 
 ``` 
->2.1  DefaultSingletonBeanRegistry#getSingleton(String beanName, ObjectFactory<?> singletonFactory)：导致2中的createBean方法会执行
-``` singletonObject = singletonFactory.getObject();	 ``` 	
+>2.1.  DefaultSingletonBeanRegistry#getSingleton(String beanName, ObjectFactory<?> singletonFactory)：导致2中的createBean方法会执行
+```
+singletonObject = singletonFactory.getObject();
+``` 	
 >>2.1.1 调用createBean方法，返回beanInstance
-``` Object beanInstance = doCreateBean(beanName, mbdToUse, args); ``` 		
+```
+Object beanInstance = doCreateBean(beanName, mbdToUse, args);
+``` 		
 >>>2.1.1.1  doCreateBean方法 实例化bean
 ``` 
 if (instanceWrapper == null) {
@@ -35,10 +39,14 @@ this.singletonFactories.put(beanName, singletonFactory);
 this.earlySingletonObjects.remove(beanName);	
 ```
 >>>2.1.1.3  doCreateBean  填充属性
-```populateBean(beanName, mbd, instanceWrapper);```
+```
+populateBean(beanName, mbd, instanceWrapper);
+```
 
 >>>2.1.1.4  doCreateBean  初始化
-```exposedObject = initializeBean(beanName, exposedObject, mbd);```				
+```
+exposedObject = initializeBean(beanName, exposedObject, mbd);
+```				
 >>>>2.1.1.4.1  initializeBean方法，并return wrappedBean;
 ```
 invokeAwareMethods(beanName, bean);
@@ -58,16 +66,18 @@ return beanInstance;
 ```
 		
 >2.2 getSingleton： 已经拿到对象了
-```newSingleton = true;```
->
+```
+newSingleton = true;
+```
 >2.3 getSingleton： 放入一级缓存（二级缓存可能是空的） 删除二三级缓存
 ```
 if (newSingleton) {
         addSingleton(beanName, singletonObject);
 }
 ```
->2.4 getSingleton：返回
-```return singletonObject;```
-				
+>2.4. getSingleton：返回
+```
+return singletonObject;
+```				
 3. doGetBean：这里会判断是否是FactoryBean 如mybatis中的MapperFactoryBean
 ```bean = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);```
