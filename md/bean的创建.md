@@ -5,6 +5,7 @@ getSingleton用于获取和创建bean，首先调用getSingleton方法从缓存�
 	导致执行2.1.1.2中的getEarlyBeanReference方法 
 ```
 Object sharedInstance = getSingleton(beanName);
+getSingleton(beanName, true);
 ``` 
 2. doGetBean：缓存中没有就创建
 ``` 
