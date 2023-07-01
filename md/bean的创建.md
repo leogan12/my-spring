@@ -13,7 +13,8 @@ sharedInstance = getSingleton(beanName, () -> {
 return createBean(beanName, mbd, args);
 }); 
 ``` 
->2.1.  DefaultSingletonBeanRegistry#getSingleton(String beanName, ObjectFactory<?> singletonFactory)：导致2中的createBean方法会执行
+>2.1.  DefaultSingletonBeanRegistry#getSingleton(String beanName, ObjectFactory<?> singletonFactory)：导致2中的createBean方法会执行，
+getSingleton只检查一级缓存中有没有，最后得到了对象直接放到一级缓存中；
 ```
 singletonObject = singletonFactory.getObject();
 ``` 	
