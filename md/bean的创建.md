@@ -14,11 +14,12 @@ return createBean(beanName, mbd, args);
 }); 
 ``` 
 >2.1.  DefaultSingletonBeanRegistry#getSingleton(String beanName, ObjectFactory<?> singletonFactory)：导致2中的createBean方法会执行，
-getSingleton只检查一级缓存中有没有，最后得到了对象直接放到一级缓存中；
+这里的getSingleton只检查一级缓存中有没有，最后得到了对象直接放到一级缓存中；
 ```
 singletonObject = singletonFactory.getObject();
 ``` 	
->>2.1.1 调用createBean方法，返回beanInstance
+>>2.1.1 调用createBean方法，返回beanInstance。从注释中我们可以看到createBean方法的作用：这个类的中心方法：创建一个bean实例， 填充 bean 实例，应用后处理器等。 @see #doCreateBean。<br/>
+createBean只是做一些不太重要的工作，很多Bean的重要流程是在doCreateBean里面实现的。<br/>
 ```
 Object beanInstance = doCreateBean(beanName, mbdToUse, args);
 ``` 		
@@ -83,3 +84,5 @@ return singletonObject;
 ```				
 3. doGetBean：这里会判断是否是FactoryBean 如mybatis中的MapperFactoryBean
 ```bean = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);```
+
+参考： SpringBean的生命周期——doGetBean函数探究 https://blog.csdn.net/weixin_45525272/article/details/126220655
