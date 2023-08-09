@@ -6,7 +6,7 @@
 >2.1 对于用配置文件，我们的入口是MapperScannerConfigurer继承了BeanDefinitionRegistryPostProcessor extends BeanFactoryPostProcessor；
     最后都是要周doScan来扫描对应的路径获取BeanDefinitionHolder，这里调用spring的ClassPathBeanDefinitionScanner来获取BeanDefinition，得到的beanClass是Mapper接口对象，
     不是我们想要的mybatis对象，我们要的beanClass是MapperFactoryBean，所以接着运行了processBeanDefinitions()方法，如3中所示代码，修改对应的beanClass
-<img src="https://gitee.com/leogan/forsave/blob/master/picture/MapperScannerConfigurer.png"/>
+<img src="https://gitee.com/leogan/forsave/raw/master/picture/MapperScannerConfigurer.png"/>
 3. 我们扫描包路径，得到对应的mapper类，进行遍历，注册自己的BeanDefinition，注意这里最主要注册的信息是beanName，beanClass=MapperFactoryBean.class；
 ```
     String beanClassName = definition.getBeanClassName();
